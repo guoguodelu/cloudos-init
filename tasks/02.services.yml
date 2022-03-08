@@ -1,0 +1,28 @@
+---
+# author: lujianguo
+
+- name: Stop and disable service
+  systemd: "name={{ item }}  state=stopped enabled=false"
+  with_items: "{{ __service  }}"
+  ignore_errors: yes
+  tags: stop-service
+
+- name: Config chronyd
+  template: "src=chrony.conf.j2 dest=/etc/chrony/chrony.conf"
+  notify: restart chronyd
+  tags: ntp
+
+- name: Tune sshd
+  replace: "path=/etc/ssh/sshd_config  regexp={{ item.old }} replace={{ item.new }} backup=yes"
+  notify: restart sshd
+  with_items: 
+    - { old: '^PasswordAuthentication no', new: 'PasswordAuthentication yes' }
+    - { old: '^PermitRootLogin.*', new: 'PermitRootLogin PermitRootLogin prohibit-password' }
+  tags: sshd
+
+- name: Tune resolved.conf
+  replace: "path=/etc/systemd/resolved.conf  regexp={{ item.old }} replace={{ item.new }} backup=yes"
+  notify: restart systemd-resolved
+  with_items: 
+    - { old: '^#DNSStubListener=yes', new: 'DNSStubListener=no' }
+  tags: resolved

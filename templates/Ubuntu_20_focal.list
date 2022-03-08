@@ -1,0 +1,10 @@
+deb http://{{ __repo_url }}/ubuntu focal main restricted
+deb http://{{ __repo_url }}/ubuntu focal-updates main restricted
+deb http://{{ __repo_url }}/ubuntu focal universe
+deb http://{{ __repo_url }}/ubuntu focal-updates universe
+deb http://{{ __repo_url }}/ubuntu focal multiverse
+deb http://{{ __repo_url }}/ubuntu focal-updates multiverse
+deb http://{{ __repo_url }}/ubuntu focal-backports main restricted universe multiverse
+deb http://{{ __repo_url }}/ubuntu focal-security main restricted
+deb http://{{ __repo_url }}/ubuntu focal-security universe
+deb http://{{ __repo_url }}/ubuntu focal-security multiverse

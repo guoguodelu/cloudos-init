@@ -1,0 +1,14 @@
+---
+# author: lujianguo
+
+- name: Setting timezone
+  file: src=/usr/share/zoneinfo/Asia/Shanghai dest=/etc/localtime state=link follow=yes
+  tags: timezone
+
+- name: Ensure a locale exists
+  locale_gen:  name=en_US.UTF-8  state=present
+  tags: lang
+
+- name: Setting language
+  template: src=lang.sh.j2  dest=/etc/profile.d/lang.sh  owner=root group=root mode=0644  backup=yes
+  tags: lang

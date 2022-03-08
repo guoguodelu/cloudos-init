@@ -1,0 +1,42 @@
+---
+# author: lujianguo
+
+- name: Copy repo files
+  template: "src={{ item.src }}  dest={{ item.dest }}"
+  with_items: "{{ __package_repo }}"
+  tags: repo
+
+- name: Backup and empty sources.list 
+  shell: "cp -p /etc/apt/sources.list /etc/apt/sources.list.bak && >/etc/apt/sources.list"
+  tags: repo
+
+- name: Only run "update_cache=yes" if the last one is more than 3600 seconds ago
+  apt:  update_cache=yes  cache_valid_time=3600
+  tags: update_cache
+
+- name: Install packages
+  apt: "name={{ __package }} state=present install_recommends=no"
+  tags: package
+
+- name: Apt dist-upgrade
+  apt: upgrade=dist
+  tags: upgrade
+
+- name: Update kernel 
+  apt : "name={{ __kernel }} state=present "
+  tags: kernel
+
+
+
+
+
+
+
+
+
+
+
+## [DEPRECATION WARNING]: Invoking "apt" only once while using a loop via squash_actions is deprecated. Instead ofusing a loop to supply multiple items and specifying `name: "{{ item }}"`, please use `name: '{{ __package }}'` and remove the loop. This feature will be removed in version 2.11. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+#
+#  apt: "name={{ item }} state=present install_recommends=no update_cache=yes"
+#  with_items: "{{ __package }}"

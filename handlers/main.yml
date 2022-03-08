@@ -1,0 +1,11 @@
+---
+# author: lujianguo
+
+- name: restart chronyd
+  systemd: name=chronyd.service state=restarted
+
+- name: restart sshd
+  systemd: name=sshd.service state=restarted
+
+- name: restart systemd-resolved
+  systemd: name=systemd-resolved.service state=restarted

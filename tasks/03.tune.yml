@@ -1,0 +1,15 @@
+---
+# author: lujianguo
+
+- name: Set sysctl.conf
+  sysctl: "name={{ item.name }} value={{ item.value }} state=present sysctl_set=yes reload=yes ignoreerrors=yes"
+  with_items: "{{  __sysctl }}"
+  tags: sysctl
+
+- name: Kernel modules
+  template: src=k8s-modules.conf.j2 dest=/etc/modules-load.d/k8s-modules.conf owner=root group=root mode=0644 backup=yes
+  tags: modules
+
+- name: Setting limits
+  template: src=k8s-limits.conf.j2  dest=/etc/security/limits.d/k8s-limits.conf owner=root group=root mode=0644 backup=yes
+  tags: limits
